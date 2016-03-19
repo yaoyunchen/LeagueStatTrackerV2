@@ -205,14 +205,17 @@ LeagueStatTrackerApp.factory('$champions', ['$http', '$q', function($http, $q) {
       var deferred = $q.defer();
       var imageID = [];
       var region = 'na';
-
+      champID = 0;
       var urlBase = '/search/champ';
       var callbackName = 'JSON_CALLBACK';
       var url = urlBase + '/' + region + '/' + champID + '?callback=' + callbackName;
-
       $http.get(url)
       .then(function(res) {
-        deferred.resolve(imageID = res.data.key);
+        if (res.data.status.status_code == 200) {
+          deferred.resolve(imageID = res.data.key);
+        } else if (res.data.status.status_code == 404) {
+          
+        }
       });
 
       return deferred.promise.$$state;

@@ -1,5 +1,6 @@
 var express = require('express');
 var request = require('request');
+var env = require('../env.js');
 var router = express.Router();
 
 // GET home page. 
@@ -9,6 +10,7 @@ router.get('/', function(req, res, next) {
 
 // Should be in database or process.env.
 const API_KEY = process.env.LOL_API_KEY;
+//const API_KEY = "8a959856-61b1-4248-8746-ee2e0c36f64f";
 
 // Gets the summoner information from the LoL API and returns it to the summoner factory.
 router.get('/search/:region/:summonerName', function(req, res) {
@@ -89,25 +91,13 @@ router.get('/search/masteries/:region/:summonerID', function(req, res) {
   });
 });
 
-// Get champion data from a champion ID.
-router.get('/search/champ/:region/:champID', function(req, res) {
-  var path = "https://global.api.pvp.net/api/lol/static-data/" + req.params.region + "/v1.2/champion/" + req.params.champID + "?champData=image&api_key=" + API_KEY;
-
-  request.get(path, function(err, response) {
-    if (!err && response.statusCode === 200) {
-      res.json(JSON.parse(response.body));
-    } else {
-      console.error(err);
-    }
-  });
-});
 
 // Get champion data from a champion ID.
 router.get('/search/champ/:region/:champID', function(req, res) {
-  var path = "https://global.api.pvp.net/api/lol/static-data/" + req.params.region + "/v1.2/champion/" + req.params.champID + "?champData=image&api_key=" + API_KEY;
-
+  
+  var path = "https://" + req.params.region + ".api.pvp.net/api/lol/static-data/" + req.params.region + "/v1.2/champion/" + req.params.champID + "?champData=image&api_key=" + API_KEY;
   request.get(path, function(err, response) {
-    if (!err && response.statusCode === 200) {
+    if (!err) {
       res.json(JSON.parse(response.body));
     } else {
       console.error(err);
@@ -118,7 +108,6 @@ router.get('/search/champ/:region/:champID', function(req, res) {
 // Get current free to play champions.
 router.get('/search/freechamps', function(req, res) {
   var path = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + API_KEY;
-  
   request.get(path, function(err, response) {
     if (!err && response.statusCode === 200) {
       res.json(JSON.parse(response.body));
