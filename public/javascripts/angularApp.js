@@ -100,10 +100,10 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', '$summoner', 'n
       // Get data from the summoner factory.
       $scope.summoner = $summoner.get($scope.searchName, $scope.regions.selectedOption.name, function() {
         $scope.getStats();
-        $scope.getRecent();
         $scope.getRank();
-        $scope.getRunes();
-        $scope.getMasteries();
+        // $scope.getRecent();
+        // $scope.getRunes();
+        // $scope.getMasteries();
         $scope.iconUrl = "http://ddragon.leagueoflegends.com/cdn/6.5.1/img/profileicon/" + $scope.summoner.value.profileIconId + ".png";
       });
     }
@@ -187,16 +187,16 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', '$summoner', 'n
     }
   }
 
-  // Gets the summoner's rune pages data.
-  // Currently only gets data, not sorted or displayed.
-  $scope.getRunes = function() {
-    $scope.summoner.runes = $summoner.getRunes($scope.summoner.value.id, $scope.regions.selectedOption.name);
-  };
+  // // Gets the summoner's rune pages data.
+  // // Currently only gets data, not sorted or displayed.
+  // $scope.getRunes = function() {
+  //   $scope.summoner.runes = $summoner.getRunes($scope.summoner.value.id, $scope.regions.selectedOption.name);
+  // };
 
-  // Gets the summoner's masteries data.
-  $scope.getMasteries = function() {
-    $scope.summoner.masteries = $summoner.getMasteries($scope.summoner.value.id, $scope.regions.selectedOption.name);
-  };
+  // // Gets the summoner's masteries data.
+  // $scope.getMasteries = function() {
+  //   $scope.summoner.masteries = $summoner.getMasteries($scope.summoner.value.id, $scope.regions.selectedOption.name);
+  // };
 
   // Sorts the stat data of the summoner to be displayed on graphs.
   $scope.getData = function(type, title) {

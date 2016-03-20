@@ -18,7 +18,7 @@ router.get('/search/:region/:summonerName', function(req, res) {
   
   request.get(path, function(err, response) {
     // Only return data if it's a success.
-    if (!err && response.statusCode === 200) {
+    if (!err) {
       res.json(JSON.parse(response.body));
     } else {
       console.error(err);
@@ -31,7 +31,7 @@ router.get('/search/stats/:region/:summonerID', function(req, res) {
   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.3/stats/by-summoner/" + req.params.summonerID +"/summary?api_key=" + API_KEY;
   
   request.get(path, function(err, response) {
-    if (!err && response.statusCode === 200) {
+    if (!err) {
       res.json(JSON.parse(response.body));
     } else {
       console.error(err);
@@ -44,7 +44,7 @@ router.get('/search/rank/:region/:summonerID', function(req, res) {
   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v2.5/league/by-summoner/" + req.params.summonerID + "/entry?api_key=" + API_KEY;
   
   request.get(path, function(err, response) {
-    if (!err && response.statusCode === 200) {
+    if (!err) {
       res.json(JSON.parse(response.body));
     } else {
       console.error(err);
@@ -65,31 +65,31 @@ router.get('/search/recent/:region/:summonerID', function(req, res) {
   });
 });
 
-// Get rune pages of a summoner.
-router.get('/search/runes/:region/:summonerID', function(req, res) {
-  var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/" + req.params.summonerID + "/runes?api_key=" + API_KEY;
+// // Get rune pages of a summoner.
+// router.get('/search/runes/:region/:summonerID', function(req, res) {
+//   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/" + req.params.summonerID + "/runes?api_key=" + API_KEY;
 
-  request.get(path, function(err, response) {
-    if (!err && response.statusCode === 200) {
-      res.json(JSON.parse(response.body));
-    } else {
-      console.error(err);
-    }
-  });
-});
+//   request.get(path, function(err, response) {
+//     if (!err && response.statusCode === 200) {
+//       res.json(JSON.parse(response.body));
+//     } else {
+//       console.error(err);
+//     }
+//   });
+// });
 
-// Get masteries pages of a summoner.
-router.get('/search/masteries/:region/:summonerID', function(req, res) {
-  var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/" + req.params.summonerID+ "/masteries?api_key=" + API_KEY;
+// // Get masteries pages of a summoner.
+// router.get('/search/masteries/:region/:summonerID', function(req, res) {
+//   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/" + req.params.summonerID+ "/masteries?api_key=" + API_KEY;
 
-  request.get(path, function(err, response) {
-    if (!err && response.statusCode === 200) {
-      res.json(JSON.parse(response.body));
-    } else {
-      console.error(err);
-    }
-  });
-});
+//   request.get(path, function(err, response) {
+//     if (!err && response.statusCode === 200) {
+//       res.json(JSON.parse(response.body));
+//     } else {
+//       console.error(err);
+//     }
+//   });
+// });
 
 
 // Get champion data from a champion ID.
