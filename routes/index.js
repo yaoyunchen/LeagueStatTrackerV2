@@ -1,6 +1,6 @@
 var express = require('express');
 var request = require('request');
-var env = require('../env.js');
+//var env = require('../env.js');
 var router = express.Router();
 
 // GET home page. 
