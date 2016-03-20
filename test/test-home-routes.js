@@ -3,17 +3,15 @@
 // Set to test.
 process.env.NODE_ENV = 'test';
 
-// // Dependencies.
+// Dependencies.
 //var mongoose = require('mongoose');
 var app = require('../app');
-var helper = require('../test/_test-helper');
+require('../test/_test-helper');
 
-chai = helper.chai;
-
-// Extend each object with chai's 'assert' property.
-var assert = chai.assert;
-var should = chai.should();
-var expect = chai.expect();
+// chai = helper.chai;
+// var assert = chai.assert;
+// var should = chai.should();
+// var expect = chai.expect();
 
 
 describe('routes', function() {
@@ -56,6 +54,7 @@ describe('routes', function() {
       it('should be json', function() {
         res.should.be.json;
       });
+
       it('should be an object', function() {
         assert.isObject(res.body, '/search/freechamps response is an object');
       });
@@ -80,36 +79,34 @@ describe('routes', function() {
             assert.isTrue(freeToPlay, 'champion is free to play.');
           }
         });
-
       });       // data
     });       // json response
   });       // /search/freeChamps
 
   describe('/search/champ/:region/:champID', function() {
     var res, err;
+    var region = 'na';
+    // Data to compare against.
+    // If there's a champion database, replace this.
+    var teemo = {
+      id: 17,
+      key: "Teemo",
+      name: "Teemo",
+      title: "the Swift Scout",
+      image: {
+        full: "Teemo.png",
+        sprite: "champion3.png",
+        group: "champion",
+        x: 288,
+        y: 0,
+        w: 48,
+        h: 48
+      }
+    };
+    var path = '/search/champ/' + region + '/' + teemo.id;
 
     // Before any tests, connect to the LoL API.
     before(function(done){
-      var region = 'na';
-      // Data to compare against.
-      // If there's a champion database, replace this.
-      var teemo = {
-        id: 17,
-        key: "Teemo",
-        name: "Teemo",
-        title: "the Swift Scout",
-        image: {
-          full: "Teemo.png",
-          sprite: "champion3.png",
-          group: "champion",
-          x: 288,
-          y: 0,
-          w: 48,
-          h: 48
-        }
-      };
-
-      var path = '/search/champ/' + region + '/' + teemo.id;
       chai.request(app)
       .get(path)
       .then(function(response) {
@@ -118,15 +115,34 @@ describe('routes', function() {
       }, function(error){
         err = error;
         done();
-      })
+      });
     });       // before
 
-    it('should return 200', function() {
+    // Checks if the route successfully returns data.
+    it('should return 200 for valid route', function() {
       assert.equal(200, res.statusCode);
     });
 
-    it('should be json', function() {
-      res.should.be.json;
-    });       
+    describe('json response', function() {
+      it('should be json', function() {
+        res.should.be.json;
+      }); 
+
+      // Check if the returned data is valid.
+      it('should not have status code 404 in body for valid champion ID', function() {
+        assert.isFalse(res.body.hasOwnProperty('status'), 'should not have status in response');
+      });
+
+
+      // Check if the returned data is accurate.
+      describe('data', function() {
+        it('should be an object', function() {
+          assert.isObject(res.body, '/search/champ/:region/:champID response is an object');
+        });
+        it('should match teemo', function() {
+          assert.deepEqual(teemo, res.body);
+        });
+      });       // data
+    });       // json response
   });       // /search/champ/:region/:champID
 });    // routes
