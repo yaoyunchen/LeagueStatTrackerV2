@@ -81,7 +81,7 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
       $scope.summoner = $summoner.get($scope.searchName, $scope.regions.value.selectedOption.name, function() {
         $scope.getStats();
         $scope.getRank();
-        // $scope.getRecent();
+        $scope.getRecent();
         // $scope.getRunes();
         // $scope.getMasteries();
         $scope.iconUrl = "http://ddragon.leagueoflegends.com/cdn/6.5.1/img/profileicon/" + $scope.summoner.value.profileIconId + ".png";
