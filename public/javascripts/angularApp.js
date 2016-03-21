@@ -153,7 +153,8 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$s
               "id": $scope.summoner.value.id,
               "champ": champ.value
             }
-          );          
+          ); 
+          recent.champ = champ.value;         
         });
       }  else {
         var champ = $champions.getChamp(recent.championId, function() {
@@ -162,11 +163,13 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$s
               "id": $scope.summoner.value.id,
               "champ": champ.value
             }
-          );          
+          ); 
+          recent.champ = champ.value;         
         });        
       } 
       // Adds the sorted team data to the corresponding recent match.
       recent.teams = teams;
+
     });
   };
 
