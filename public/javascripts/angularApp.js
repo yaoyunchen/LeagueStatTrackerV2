@@ -48,7 +48,6 @@ LeagueStatTrackerApp.config(function($routeProvider){
 LeagueStatTrackerApp.controller('mainController', ['$scope', '$champions', '$location', function($scope, $champions, $location) {
   // Adds a class to the injected home page, used mainly for styling.
   $scope.pageClass = "page-home";
-
   // Clicking the summoner search button will redirect to the summoner page.
   // If possible, replace the redirect with the summoner search bar from the summoner page instead.  When a name is searched, automatically go to summoner page with the results.
   $scope.go = function(path) {
@@ -78,11 +77,11 @@ LeagueStatTrackerApp.controller('mainController', ['$scope', '$champions', '$loc
 
 
 //Summoner controller.  Used for looking up summoner info.
-LeagueStatTrackerApp.controller('summonerController', ['$scope', '$summoner', 'ngDialog', 'REGIONS', function($scope, $summoner, ngDialog, REGIONS) {
+LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$regions', '$summoner', function($scope, ngDialog, $regions, $summoner) {
   // Adds a class to the page, used for identifying when styling.
   $scope.pageClass = "page-summoner";
 
-  $scope.regions = REGIONS;
+  $scope.regions = $regions.getRegions();
   
   // Value entered into the form input field when searching for a summoner.
   $scope.searchName = '';

@@ -5,8 +5,8 @@ body {
   -moz-background-size:     cover;
   -o-background-size:       cover;
   background-size:          cover;
-  color:                    #f2ae44;
-  font-family:              "Times New Roman", Times, serif
+  color:                    #f5c270;
+  font-family:              Arial, Helvetica, sans-serif;
 }
 
 /* Sets the container div so it will clear the navbar. */
@@ -32,7 +32,7 @@ body {
   margin:                   10px;
   text-align:               center;
   font-size:                3em; 
-  color:                    #f2ae44;
+  color:                    #f5c270;
 }
 
 /* Used as a seperator between divs. */
@@ -64,13 +64,13 @@ select {
 }
 .nav-tabs, .nav-pills {
   text-align:               center;
-  border-bottom:            1px solid #f2ae44;
+  border-bottom:            1px solid #f5c270;
 }
 .ng-binding {
-  color:                    #f2ae44;
+  color:                    #f5c270;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-  background-color:         #f2ae44;
+  background-color:         #f5c270;
   border:                   none;
 }
 

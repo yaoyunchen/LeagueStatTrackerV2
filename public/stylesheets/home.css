@@ -19,7 +19,7 @@
   transition:             opacity 1s;
   opacity:                0;
   border-radius:          50px 50px 50px 50px;
-  border:                 2px solid #f2ae44;
+  border:                 2px solid #f5c270;
 }
 .jumbotron-slideshow .slideshow.visible {
   transition:             none;

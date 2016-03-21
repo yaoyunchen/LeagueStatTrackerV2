@@ -4,7 +4,6 @@
     <h1>Summoner Stats</h1>
   </div>
 </div>
-
 <!-- Search area for summoners. Region can be selected and there is validation for entry length based on League sign up name standards. -->
 <form role="form" name="searchForm"
   ng-submit="summonerSearch(searchForm.$valid)"
@@ -16,8 +15,8 @@
         <div class="input-group-btn">
             <select class="btn btn-warning summoner-search" 
               name="repeatSelect" 
-              ng-model="regions.selectedOption" 
-              ng-options="option.name for option in regions.availableOptions track by option.id"
+              ng-model="regions.value[6]" 
+              ng-options="option.name for option in regions.value track by option.id"
             >
             </select>
         </div>

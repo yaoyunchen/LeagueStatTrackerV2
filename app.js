@@ -24,17 +24,31 @@ var config = require('./_config');
 // MONGOOSE
 // --------
 // // MONGODB SCHEMAS
-// require('./models/regions');
-// require('./models/gametypes');
-
-mongoose.connect(config.mongoURI[app.settings.env], function(err, res) {
-  if (err) {
-    console.error('Error connecting to database: ', err);
-  } else {
-    // console.log('Connected to database: ' + config.mongoURI[app.settings.env]);
+var options = {
+  server: {
+    socketOptions: {
+      keepAlive: 1,
+      connectTimeoutMS: 30000
+    }
+  },
+  replset: {
+    socketOptions: {
+      keepAlive: 1,
+      connectTimeoutMS: 30000
+    }
   }
-})
-// mongoose.connect('mongodb://localhost/LeagueStatTrackerApp');
+};
+
+var mongodbUri;
+mongodbUri = process.env.MONGOLAB_URI;
+mongoose.connect(mongodbUri), options;
+
+var con = mongoose.connection;
+con.on('error', console.error.bind(console, 'connection error:'));
+
+con.once('open', function() {
+  console.log('Connection established with mongodb server.');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,8 +56,7 @@ app.set('view engine', 'ejs');
 
 // MIDDLEWARE
 // ----------
-// uncomment after placing favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -1,6 +1,12 @@
-var express = require('express');
-var request = require('request');
-//var env = require('../env.js');
+var express       = require('express');
+var request       = require('request');
+var mongoose      = require('mongoose');
+
+var app           = require('../app.js');
+if (process.env.NODE_ENV != 'production') {
+  var env         = require('../env.js');
+}
+
 var router = express.Router();
 
 // GET home page. 
@@ -10,8 +16,38 @@ router.get('/', function(req, res, next) {
 
 // Should be in database or process.env.
 const API_KEY = process.env.LOL_API_KEY;
-//const API_KEY = "8a959856-61b1-4248-8746-ee2e0c36f64f";
 
+// MONGODB ROUTES
+// --------------
+var Champions   = require('../models/champions');
+var Regions     = require('../models/regions');
+var GameTypes   = require('../models/gametypes');
+
+router.get('/regions', function(req, res) {
+  var query = Regions.find({});
+    
+  query.exec(function(err, docs) {
+    if (!err) {
+      res.json(docs);
+    } else {
+      res.send(err);
+    }
+  });
+});
+
+
+
+// Champions.find({"key" : "17"}).exec(function(err, docs) {
+//   if (err) throw err;
+
+//   docs.forEach(function(doc) {
+//     console.log(doc)
+//   })
+// });
+
+
+// LEAGUE API ROUTES
+// -----------------
 // Gets the summoner information from the LoL API and returns it to the summoner factory.
 router.get('/search/:region/:summonerName', function(req, res) {
   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/by-name/"+ req.params.summonerName + "?api_key=" + API_KEY;

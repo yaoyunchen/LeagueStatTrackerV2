@@ -174,7 +174,7 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
 
     //   return masteries;
     // }
-  }
+  };
 }]);
 
 // CHAMPIONS
@@ -221,5 +221,25 @@ LeagueStatTrackerApp.factory('$champions', ['$http', '$q', function($http, $q) {
 
       return deferred.promise.$$state;
     }
-  }
+  };
 }]);
+
+LeagueStatTrackerApp.factory('$regions', ['$http', '$q', function($http, $q) {
+  return {
+    getRegions: function() {
+      var deferred = $q.defer();
+      var regions = [];
+
+      var urlBase = '/regions';
+      var callbackName = 'JSON_CALLBACK';
+      var url = urlBase + '?callback=' + callbackName;
+      $http.get(url)
+      .then(function(res) {
+        deferred.resolve(regions = res.data);
+      });
+
+      return deferred.promise.$$state;
+    }
+  };
+}]);
+
