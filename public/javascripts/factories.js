@@ -10,7 +10,6 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
     get: function(summonerName, region, callback) {
       var deferred = $q.defer();
       var summoner = {};
-
       var urlBase = '/search';
       var callbackName = 'JSON_CALLBACK';
       var url = urlBase + '/' + region + '/' + summonerName + '?callback=' + callbackName;
@@ -235,7 +234,12 @@ LeagueStatTrackerApp.factory('$regions', ['$http', '$q', function($http, $q) {
       var url = urlBase + '?callback=' + callbackName;
       $http.get(url)
       .then(function(res) {
-        deferred.resolve(regions = res.data);
+        var options = res.data;
+        deferred.resolve(regions = {
+          repeatSelect: null,
+          availableOptions: res.data,
+          selectedOption: {"_id":"56ef9c3f6c332ceddc62c20a","id":7,"name":"na"}
+        });
       });
 
       return deferred.promise.$$state;

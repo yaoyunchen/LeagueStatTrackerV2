@@ -5,26 +5,6 @@
 // angularCharts is used to display the graph of summoner stats.
 var LeagueStatTrackerApp = angular.module('LeagueStatTrackerApp', ['ngRoute', 'ngAnimate', 'ngDialog', 'angularCharts']);
 
-// CONSTANTS
-// ---------
-// Should be moved to the back-end or saved to mongoDB.
-// Different summoners are in every region.
-LeagueStatTrackerApp.constant('REGIONS', {
-  repeatSelect: null,
-  availableOptions: [
-    {id: '1', name: 'br'},
-    {id: '2', name: 'eune'},
-    {id: '3', name: 'euw'},
-    {id: '4', name: 'kr'},
-    {id: '5', name: 'lan'},
-    {id: '6', name: 'las'},
-    {id: '7', name: 'na'},
-    {id: '8', name: 'oce'},
-    {id: '9', name: 'ru'},
-    {id: '10', name: 'tr'}
-  ],
-  selectedOption: {id: '7', name: 'na'}
-})
 
 // Configure routes to inject pages for single page views.
 LeagueStatTrackerApp.config(function($routeProvider){
@@ -82,7 +62,8 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
   $scope.pageClass = "page-summoner";
 
   $scope.regions = $regions.getRegions();
-  
+
+
   // Value entered into the form input field when searching for a summoner.
   $scope.searchName = '';
 
@@ -97,7 +78,7 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
     // Is valid is from the form field validations.  Only search if validations pass.
     if (isValid) {
       // Get data from the summoner factory.
-      $scope.summoner = $summoner.get($scope.searchName, $scope.regions.selectedOption.name, function() {
+      $scope.summoner = $summoner.get($scope.searchName, $scope.regions.value.selectedOption.name, function() {
         $scope.getStats();
         $scope.getRank();
         // $scope.getRecent();
@@ -110,7 +91,7 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
 
   // Get the stats of the summoners for various game types.
   $scope.getStats = function(callback) {
-    $scope.summoner.stats = $summoner.getStats($scope.summoner.value.id, $scope.regions.selectedOption.name, function(){
+    $scope.summoner.stats = $summoner.getStats($scope.summoner.value.id, $scope.regions.value.selectedOption.name, function(){
       // Sorts the summoner stat data for display in the graph.
       $scope.getData("wins", "Total Wins");      
     });
@@ -118,12 +99,12 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
 
   // Gets the ranked stats of the summoner.
   $scope.getRank = function() {
-    $scope.summoner.rank = $summoner.getRank($scope.summoner.value.id, $scope.regions.selectedOption.name);
+    $scope.summoner.rank = $summoner.getRank($scope.summoner.value.id, $scope.regions.value.selectedOption.name);
   };
 
   // Gets the recent matches the summoner played.
   $scope.getRecent = function(callback) {
-    $scope.summoner.recent = $summoner.getRecent($scope.summoner.value.id, $scope.regions.selectedOption.name, function(){
+    $scope.summoner.recent = $summoner.getRecent($scope.summoner.value.id, $scope.regions.value.selectedOption.name, function(){
       $scope.getChamp();
     });
   };
@@ -142,7 +123,7 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
       // Get the id and champion of other summoners in the game.
       $scope.summoner.recent[i].fellowPlayers.forEach(function(player) {
         
-        champ = $summoner.getChamp(player.championId, $scope.regions.selectedOption.name);
+        champ = $summoner.getChamp(player.championId, $scope.regions.value.selectedOption.name);
 
         // Determine if the player is on team one or team two.
         if (player.teamId == 100) {
@@ -164,7 +145,7 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
 
       // Get the summoner's id and champion onto the correct team.
       if ($scope.summoner.recent[i].teamId == 100) {
-        $scope.summoner.recent[i].champ = $summoner.getChamp($scope.summoner.recent[i].championId, $scope.regions.selectedOption.name)
+        $scope.summoner.recent[i].champ = $summoner.getChamp($scope.summoner.recent[i].championId, $scope.regions.value.selectedOption.name)
         teams.teamOne.push(
           {
             "id": $scope.summoner.value.id,
@@ -172,7 +153,7 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
           }
         );
       }  else {
-        $scope.summoner.recent[i].champ = $summoner.getChamp($scope.summoner.recent[i].championId, $scope.regions.selectedOption.name)
+        $scope.summoner.recent[i].champ = $summoner.getChamp($scope.summoner.recent[i].championId, $scope.regions.value.selectedOption.name)
         teams.teamTwo.push(
           {
             "id": $scope.summoner.value.id, 
@@ -189,12 +170,12 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
   // // Gets the summoner's rune pages data.
   // // Currently only gets data, not sorted or displayed.
   // $scope.getRunes = function() {
-  //   $scope.summoner.runes = $summoner.getRunes($scope.summoner.value.id, $scope.regions.selectedOption.name);
+  //   $scope.summoner.runes = $summoner.getRunes($scope.summoner.value.id, $scope.regions.value.selectedOption.name);
   // };
 
   // // Gets the summoner's masteries data.
   // $scope.getMasteries = function() {
-  //   $scope.summoner.masteries = $summoner.getMasteries($scope.summoner.value.id, $scope.regions.selectedOption.name);
+  //   $scope.summoner.masteries = $summoner.getMasteries($scope.summoner.value.id, $scope.regions.value.selectedOption.name);
   // };
 
   // Sorts the stat data of the summoner to be displayed on graphs.
