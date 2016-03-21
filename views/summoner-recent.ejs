@@ -16,7 +16,7 @@
           <td class="col-sm-2">{{ recent.gameMode }}</td>
           <td class="col-sm-2">
             <p>{{ recent.gameId }}</p>
-            <p>(champion: {{ recent.champ.value.name }})</p</td>
+            <p>(champion: {{ recent.champ[0].name }})</p</td>
           <td class="col-sm-4">
             <span ng-repeat="player in recent.teams.teamOne">
               <a class="champ-icon-link" type="button"
@@ -25,7 +25,7 @@
                 ng-dialog-scope="this"
               >
                 <img class="champ-icon"
-                  ng-src="http://ddragon.leagueoflegends.com/cdn/6.5.1/img/champion/{{ player.champ.value.image.full }}"
+                  ng-src="http://ddragon.leagueoflegends.com/cdn/6.5.1/img/champion/{{ player.champ[0].key}}.png"
                 />
               </a>
             </span>
@@ -38,7 +38,7 @@
                 ng-dialog-scope="this"
               >
                 <img class="champ-icon"
-                  ng-src="http://ddragon.leagueoflegends.com/cdn/6.5.1/img/champion/{{ player.champ.value.image.full }}"
+                  ng-src="http://ddragon.leagueoflegends.com/cdn/6.5.1/img/champion/{{ player.champ[0].key}}.png"
                 />
               </a>
             </span>

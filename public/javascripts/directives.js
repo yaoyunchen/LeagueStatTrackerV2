@@ -138,31 +138,20 @@ LeagueStatTrackerApp.directive("ngbgslideshow", function($interval) {
           // Watch for changes in scope.freeChamps, so slideshow will load once there's data for it to work with.
           scope.$watch( 'freeChamps', function() {
             if (scope.freeChamps.images != undefined) {
+              
               // Image urls from the LoL static constants database.
               var urls = [];
               // Names of the champion corresponding to the image.
               var names = [];
-
+              
               scope.freeChamps.images.forEach(function(ele) {
-                // Since $watch dirty checks, make sure all the data is prepared before starting the slideshow.
-                if (ele.value != undefined) {
-                  var url = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + ele.value + "_0.jpg";
-                  var name = ele.value
-                }
-                if (url) {
-                  urls.push(url);
-                }
-                if (name) {
-                  names.push(name);
-                }
-              })
-              if (urls.length == 10) {
-                 scope.images = urls;
-              }
-              if (names.length == 10) {
-                scope.names = names;
-                scope.champName = names[scope.active_image];
-              }
+                urls.push("http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + ele.value[0].key + "_0.jpg");
+                names.push(ele.value[0].name);
+              });
+              
+              scope.images = urls;
+              scope.names = names;
+              scope.champName = names[scope.active_image];
             }
           }, true);
 

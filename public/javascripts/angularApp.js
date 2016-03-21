@@ -28,6 +28,7 @@ LeagueStatTrackerApp.config(function($routeProvider){
 LeagueStatTrackerApp.controller('mainController', ['$scope', '$champions', '$location', function($scope, $champions, $location) {
   // Adds a class to the injected home page, used mainly for styling.
   $scope.pageClass = "page-home";
+  
   // Clicking the summoner search button will redirect to the summoner page.
   // If possible, replace the redirect with the summoner search bar from the summoner page instead.  When a name is searched, automatically go to summoner page with the results.
   $scope.go = function(path) {
@@ -36,33 +37,34 @@ LeagueStatTrackerApp.controller('mainController', ['$scope', '$champions', '$loc
 
   // Determine the current free champions, with a callback to get the champion images from the results.
   $scope.freeChamps = $champions.getFree(function() {
-    $scope.getChampImages();
+    $scope.getChamps();
   });
 
   // Gets the static champion images.  Used to populate the slideshow display on the home page
-  $scope.getChampImages = function() {
+  $scope.getChamps = function() {
     if ($scope.freeChamps.value.length == 10) {
       var images = [];
-      for (var i = 0; i < $scope.freeChamps.value.length; i ++) {
-        // Gets the image for a champion from the champion factory in factories.js, which calls the LoL API.
-        $scope.img = $champions.getChampImages($scope.freeChamps.value[i].id);
-        images.push($scope.img);
-      }
 
-      // Adds the array of images to the scope to use in the html.
-      $scope.freeChamps.images = images;
+      $scope.freeChamps.value.forEach(function(champ) {
+        var img = $champions.getChamp(champ.id, function() {
+          images.push(img);
+          if (images.length == 10) {
+            $scope.freeChamps.images = images;
+          }
+        });
+      });
     } 
   };
  }]);
 
 
 //Summoner controller.  Used for looking up summoner info.
-LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$regions', '$summoner', function($scope, ngDialog, $regions, $summoner) {
+LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$summoner', '$regions', '$gameTypes', '$champions', function($scope, ngDialog, $summoner, $regions, $gameTypes, $champions) {
   // Adds a class to the page, used for identifying when styling.
   $scope.pageClass = "page-summoner";
 
+  // Get the different realms in LoL.
   $scope.regions = $regions.getRegions();
-
 
   // Value entered into the form input field when searching for a summoner.
   $scope.searchName = '';
@@ -105,67 +107,68 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
   // Gets the recent matches the summoner played.
   $scope.getRecent = function(callback) {
     $scope.summoner.recent = $summoner.getRecent($scope.summoner.value.id, $scope.regions.value.selectedOption.name, function(){
+      
       $scope.getChamp();
     });
   };
 
   // Gets the champion data for the recent matches the summoner played, as well as the other summoners.
   $scope.getChamp = function() {
-    for (var i = 0; i < $scope.summoner.recent.length; i++) {
 
+    $scope.summoner.recent.forEach(function(recent) {
       // Get the two teams and add to the recent.
       var teams = {
         teamOne: [],
         teamTwo: []
       }
-      var champ;
 
       // Get the id and champion of other summoners in the game.
-      $scope.summoner.recent[i].fellowPlayers.forEach(function(player) {
-        
-        champ = $summoner.getChamp(player.championId, $scope.regions.value.selectedOption.name);
-
-        // Determine if the player is on team one or team two.
-        if (player.teamId == 100) {
-          teams.teamOne.push(
-            {
-              "id": player.summonerId,
-              "champ": champ
-            }
-          );
-        } else if (player.teamId == 200) {
-          teams.teamTwo.push(
-            {
-              "id": player.summonerId,
-              "champ": champ
-            }
-          );
-        }
-      })
+      recent.fellowPlayers.forEach(function(player) {
+  
+        var champ = $champions.getChamp(player.championId, function() {
+          // Determine if the player is on team one or team two.
+          if (player.teamId == 100) {
+            teams.teamOne.push(
+              {
+                "id": player.summonerId,
+                "champ": champ.value
+              }
+            );
+          } else if (player.teamId == 200) {
+            teams.teamTwo.push(
+              {
+                "id": player.summonerId,
+                "champ": champ.value
+              }
+            );
+          }
+        })
+      });
 
       // Get the summoner's id and champion onto the correct team.
-      if ($scope.summoner.recent[i].teamId == 100) {
-        $scope.summoner.recent[i].champ = $summoner.getChamp($scope.summoner.recent[i].championId, $scope.regions.value.selectedOption.name)
-        teams.teamOne.push(
-          {
-            "id": $scope.summoner.value.id,
-            "champ": $scope.summoner.recent[i].champ
-          }
-        );
+      if (recent.teamId == 100) {
+        var champ = $champions.getChamp(recent.championId, function() {
+          teams.teamOne.push(
+            {
+              "id": $scope.summoner.value.id,
+              "champ": champ.value
+            }
+          );          
+        });
       }  else {
-        $scope.summoner.recent[i].champ = $summoner.getChamp($scope.summoner.recent[i].championId, $scope.regions.value.selectedOption.name)
-        teams.teamTwo.push(
-          {
-            "id": $scope.summoner.value.id, 
-            "champ": $scope.summoner.recent[i].champ
-          }
-        );
+        var champ = $champions.getChamp(recent.championId, function() {
+          teams.teamTwo.push(
+            {
+              "id": $scope.summoner.value.id,
+              "champ": champ.value
+            }
+          );          
+        });        
       } 
-
       // Adds the sorted team data to the corresponding recent match.
-      $scope.summoner.recent[i].teams = teams;
-    }
-  }
+      recent.teams = teams;
+    });
+  };
 
   // // Gets the summoner's rune pages data.
   // // Currently only gets data, not sorted or displayed.
@@ -181,154 +184,98 @@ LeagueStatTrackerApp.controller('summonerController', ['$scope', 'ngDialog', '$r
   // Sorts the stat data of the summoner to be displayed on graphs.
   $scope.getData = function(type, title) {
     // Dont do anything if there hasn't been a search, so nothing is loaded on initial load.
-    if ($scope.searchName == '') {
-      return false;
-    }
+    if ($scope.searchName == '') return false;
 
-    // Various game modes of LoL.
-    // This should be put into the database.
-    var gametypes = [
-      {
-        // What LoL API calls it.
-        type: "CAP5x5",
-        // What we call it.
-        name: "Team Builder",
-        // For display on the x-axis.
-        code: "TB"
-      },
-      {
-        type: "CoopVsAI",
-        name: "Coop 5 v 5",
-        code: "COOP5"
-      }, 
-      {
-        type: "CoopVsAI3x3",
-        name: "Coop 3 v 3",
-        code: "COOP3"
-      },
-      {
-        type: "OdinUnranked",
-        name: "Dominion",
-        code: "DOM"
-      },
-      {
-        type: "RankedTeam3x3",
-        name: "Ranked 3 v 3",
-        code: "R3"
-      },
-      {
-        type: "RankedTeam5x5",
-        name: "Ranked Team",
-        code: "RTeam"
-      },
-      {
-        type: "Unranked3x3",
-        name: "Twisted Treeline",
-        code: "TT"
-      },
-      {
-        type: "RankedSolo5x5",
-        name: "Ranked Solo",
-        code: "R1"
-      },
-      {
-        type: "AramUnranked5x5",
-        name: "All Random All Mid",
-        code: "ARAM"
-      },
-      {
-        type: "Unranked",
-        name: "Normal",
-        code: "NORM"
-      },
-      {
-        type: "RankedPremade5x5",
-        name: "Ranked 5 v 5",
-        code: "R5"
-      }
-    ];
+    $scope.getGameTypes(type, title, function() {
+      var stats = $scope.summoner.stats;
 
-    var stats = $scope.summoner.stats;
+      // Data for the x-axis display of the graph.
+      var series = [];
+      // Data to be displayed in the bar graph.
+      var data =  [];
+      
+      for (var i = 0; i < stats.length; i++) {
 
-    // Data for the x-axis display of the graph.
-    var series = [];
-    // Data to be displayed in the bar graph.
-    var data =  [];
+        // Index of each game type.
+        var gameIndex;
 
-    for (var i = 0; i < stats.length; i++) {
+        // The numerical part of the graph (wins, kills, etc).
+        var yData;
 
-      // Index of each game type.
-      var gameIndex;
-
-      // The numerical part of the graph (wins, kills, etc).
-      var yData;
-
-      // For loop instead of forEach, so break can be used.
-      for (var j = 0; j < gametypes.length ; j++) {
-        if (stats[i].playerStatSummaryType == gametypes[j].type) {
-          gameIndex = j;
-          break;
+        // For loop instead of forEach, so break can be used.
+        for (var j = 0; j < $scope.gameTypes.value.length ; j++) {
+          if (stats[i].playerStatSummaryType == $scope.gameTypes.value[j].type) {
+            gameIndex = j;
+            break;
+          }
         }
+
+        // x-axis display name of the game type.
+        series.push($scope.gameTypes.value[gameIndex].name);
+
+        var aggrStats = stats[i].aggregatedStats;
+
+        // yData will be zero if the summoner has not played that type of game mode.
+        switch(type) {
+          case 'wins':
+            yData = stats[i].hasOwnProperty('wins') ? stats[i].wins : 0;
+            
+            break;
+          case 'totalchampionkills':
+            yData = aggrStats.hasOwnProperty('totalChampionKills') ? aggrStats.totalChampionKills : 0;
+
+            break;
+          case 'totalneutralminionskilled':
+            yData = aggrStats.hasOwnProperty('totalNeutralMinionsKilled') ? aggrStats.totalNeutralMinionsKilled : 0;
+
+            break;
+          case 'totalminionkills':
+            yData = aggrStats.hasOwnProperty('totalMinionKills') ? aggrStats.totalMinionKills : 0;
+
+            break;
+          case 'totalassists':
+            yData = aggrStats.hasOwnProperty('totalAssists') ? aggrStats.totalAssists : 0;
+
+            break;
+          case 'totalturretskilled':
+            yData = aggrStats.hasOwnProperty('totalTurretsKilled') ? aggrStats.totalTurretsKilled : 0;
+
+            break;
+          default:
+            yData = 0;
+        }
+
+        // Gather the data and push to the array.
+        var dataset = {
+          x: $scope.gameTypes.value[gameIndex].code,
+          y: [yData],
+          tooltip: $scope.gameTypes.value[gameIndex].name
+        };
+        data.push(dataset);
       }
 
-      // x-axis display name of the game type.
-      series.push(gametypes[gameIndex].name);
-
-      var aggrStats = stats[i].aggregatedStats;
-
-      // yData will be zero if the summoner has not played that type of game mode.
-      switch(type) {
-        case 'wins':
-          yData = stats[i].hasOwnProperty('wins') ? stats[i].wins : 0;
-          
-          break;
-        case 'totalchampionkills':
-          yData = aggrStats.hasOwnProperty('totalChampionKills') ? aggrStats.totalChampionKills : 0;
-
-          break;
-        case 'totalneutralminionskilled':
-          yData = aggrStats.hasOwnProperty('totalNeutralMinionsKilled') ? aggrStats.totalNeutralMinionsKilled : 0;
-
-          break;
-        case 'totalminionkills':
-          yData = aggrStats.hasOwnProperty('totalMinionKills') ? aggrStats.totalMinionKills : 0;
-
-          break;
-        case 'totalassists':
-          yData = aggrStats.hasOwnProperty('totalAssists') ? aggrStats.totalAssists : 0;
-
-          break;
-        case 'totalturretskilled':
-          yData = aggrStats.hasOwnProperty('totalTurretsKilled') ? aggrStats.totalTurretsKilled : 0;
-
-          break;
-        default:
-          yData = 0;
-      }
-
-      // Gather the data and push to the array.
-      var dataset = {
-        x: gametypes[gameIndex].code,
-        y: [yData],
-        tooltip: gametypes[gameIndex].name
+      // Configuration settings for the graph.
+      $scope.config = {
+        title: title,
+        tooltips: true,
+        labels: true,
+        isAnimate: true
       };
-      data.push(dataset);
-    }
 
-    // Configuration settings for the graph.
-    $scope.config = {
-      title: title,
-      tooltips: true,
-      labels: true,
-      isAnimate: true
-    };
+      // Data for the graph.
+      $scope.data = {
+        series: series,
+        data: data
+      };
+    });
+  };
 
-    // Data for the graph.
-    $scope.data = {
-      series: series,
-      data: data
-    };
-  }
+  // Various game modes of LoL.
+  $scope.getGameTypes = function(type, title, callback) {
+    $scope.gameTypes =  $gameTypes.getGameTypes(function() {
+      if (callback) callback();
+    });
+  };
 }]);
 
 

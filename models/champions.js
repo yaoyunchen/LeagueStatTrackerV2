@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
-var championSchema = new mongoose.Schema({
+var ChampionSchema = new mongoose.Schema({
   key: String,
   name: String
 });
 
-module.exports = mongoose.model('champions', championSchema);
+module.exports = mongoose.model('Champions', ChampionSchema);

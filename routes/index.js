@@ -19,9 +19,9 @@ const API_KEY = process.env.LOL_API_KEY;
 
 // MONGODB ROUTES
 // --------------
-var Champions   = require('../models/champions');
 var Regions     = require('../models/regions');
 var GameTypes   = require('../models/gametypes');
+var Champions   = require('../models/champions');
 
 router.get('/regions', function(req, res) {
   var query = Regions.find({});
@@ -35,15 +35,29 @@ router.get('/regions', function(req, res) {
   });
 });
 
+router.get('/gametypes', function(req, res) {
+  var query = GameTypes.find({});
 
+  query.exec(function(err, docs) {
+    if (!err) {
+      res.json(docs);
+    } else {
+      res.send(err);
+    }
+  });
+});
 
-// Champions.find({"key" : "17"}).exec(function(err, docs) {
-//   if (err) throw err;
-
-//   docs.forEach(function(doc) {
-//     console.log(doc)
-//   })
-// });
+router.get('/champs/:champID', function(req, res) {
+  var query = Champions.find({"id" : req.params.champID});
+  
+  query.exec(function(err, docs) {
+    if (!err) {
+      res.json(docs);
+    } else {
+      res.send(err);
+    }
+  });
+});
 
 
 // LEAGUE API ROUTES
@@ -128,18 +142,18 @@ router.get('/search/recent/:region/:summonerID', function(req, res) {
 // });
 
 
-// Get champion data from a champion ID.
-router.get('/search/champ/:region/:champID', function(req, res) {
+// // Get champion data from a champion ID.
+// router.get('/search/champ/:region/:champID', function(req, res) {
   
-  var path = "https://" + req.params.region + ".api.pvp.net/api/lol/static-data/" + req.params.region + "/v1.2/champion/" + req.params.champID + "?champData=image&api_key=" + API_KEY;
-  request.get(path, function(err, response) {
-    if (!err) {
-      res.json(JSON.parse(response.body));
-    } else {
-      console.error(err);
-    }
-  });
-});
+//   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/static-data/" + req.params.region + "/v1.2/champion/" + req.params.champID + "?champData=image&api_key=" + API_KEY;
+//   request.get(path, function(err, response) {
+//     if (!err) {
+//       res.json(JSON.parse(response.body));
+//     } else {
+//       console.error(err);
+//     }
+//   });
+// });
 
 // Get current free to play champions.
 router.get('/search/freechamps', function(req, res) {

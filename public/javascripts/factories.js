@@ -10,9 +10,10 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
     get: function(summonerName, region, callback) {
       var deferred = $q.defer();
       var summoner = {};
+      
       var urlBase = '/search';
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '/' + region + '/' + summonerName + '?callback=' + callbackName;
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + '/' + region + '/' + summonerName + jsonCallback;
 
       // Gets the data from the LoL API through the back end.
       $http.get(url)
@@ -44,10 +45,10 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
     // Gets summoner stats for a given summoner ID.
     getStats: function(summonerID, region, callback) {
       var stats = [];
+      
       var urlBase = '/search/stats';
-
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '/' + region + '/' + summonerID + '?callback=' + callbackName;
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + '/' + region + '/' + summonerID + jsonCallback;
 
       $http.get(url)
       .then(function(res) {
@@ -68,10 +69,10 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
     // Gets summoner's ranked stats.
     getRank: function(summonerID, region) {
       var rank = [];
-      var urlBase = '/search/rank';
 
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '/' + region + '/' + summonerID + '?callback=' + callbackName;
+      var urlBase = '/search/rank';
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + '/' + region + '/' + summonerID + jsonCallback;
  
       $http.get(url)
       .then(function(res) {
@@ -102,8 +103,8 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
       var recent = [];
 
       var urlBase = '/search/recent';
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '/' + region + '/' + summonerID + '?callback=' + callbackName;
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + '/' + region + '/' + summonerID + jsonCallback;
       
       $http.get(url)
       .then(function(res) {
@@ -115,34 +116,34 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
           callback();
         }
       });
-
       return recent;
-    },
-
-    // Gets the champion for a summoner, used for match history.
-    getChamp: function(champID, region) {
-      var deferred = $q.defer();
-      var champ = [];
-
-      var urlBase = '/search/champ';
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '/' + region + '/' + champID + '?callback=' + callbackName;
-      
-      $http.get(url)
-      .then(function(res) {
-        deferred.resolve(champ = res.data);
-      });
-      
-      return deferred.promise.$$state;
     }
+
+    // // Gets the champion for a summoner, used for match history.
+    // getChamp: function(champID, callback) {
+    //   var deferred = $q.defer();
+    //   var champ = [];
+      
+    //   var urlBase = '/champs';
+    //   var jsonCallback = '?callback=JSON_CALLBACK';
+    //   var url = urlBase + '/' + champID + jsonCallback;
+    //   $http.get(url)
+    //   .then(function(res) {
+    //     deferred.resolve(champ = res.data);
+    //     if (callback) {
+    //       callback();
+    //     }
+    //   });
+    //   return deferred.promise.$$state;
+    // }
 
     // // Gets summoner's rune pages.
     // getRunes: function(summonerID, region) {
     //   var runes = [];
 
     //   var urlBase = '/search/runes';
-    //   var callbackName = 'JSON_CALLBACK';
-    //   var url = urlBase + '/' + region + '/' + summonerID + '?callback=' + callbackName;
+    //   var jsonCallback = '?callback=JSON_CALLBACK';
+    //   var url = urlBase + '/' + region + '/' + summonerID + jsonCallback;
 
     //   $http.get(url)
     //   .then(function(res) {
@@ -160,8 +161,8 @@ LeagueStatTrackerApp.factory('$summoner', ['$http', '$q', function($http, $q) {
     //   var masteries = [];
 
     //   var urlBase = '/search/masteries';
-    //   var callbackName = 'JSON_CALLBACK';
-    //   var url = urlBase + '/' + region + '/' + summonerID + '?callback=' + callbackName;
+    //   var jsonCallback = '?callback=JSON_CALLBACK';
+    //   var url = urlBase + '/' + region + '/' + summonerID + jsonCallback;
 
     //   $http.get(url)
     //   .then(function(res) {
@@ -183,22 +184,40 @@ LeagueStatTrackerApp.factory('$champions', ['$http', '$q', function($http, $q) {
   "use strict";
   return {
     // Gets the current free to play champions.
-    getFree: function(imgCallback) {
+    getFree: function(callback) {
       var deferred = $q.defer();
       var champs = [];
 
       var urlBase = '/search/freechamps';
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '?callback=' + callbackName;
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + jsonCallback;
 
       $http.get(url)
       .then(function(res) {
         deferred.resolve(champs = res.data.champions);
-        if (imgCallback) {
-          imgCallback();
+        if (callback) {
+          callback();
         }
       });
 
+      return deferred.promise.$$state;
+    },
+
+    // Gets the champion for a summoner, used for match history.
+    getChamp: function(champID, callback) {
+      var deferred = $q.defer();
+      var champ = [];
+      
+      var urlBase = '/champs';
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + '/' + champID + jsonCallback;
+      $http.get(url)
+      .then(function(res) {
+        deferred.resolve(champ = res.data);
+        if (callback) {
+          callback();
+        }
+      });
       return deferred.promise.$$state;
     },
 
@@ -209,8 +228,8 @@ LeagueStatTrackerApp.factory('$champions', ['$http', '$q', function($http, $q) {
       var imageID = [];
       var region = 'na';
       var urlBase = '/search/champ';
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '/' + region + '/' + champID + '?callback=' + callbackName;
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + '/' + region + '/' + champID + jsonCallback;
       $http.get(url)
       .then(function(res) {
         if (res.status == 200) {
@@ -230,8 +249,8 @@ LeagueStatTrackerApp.factory('$regions', ['$http', '$q', function($http, $q) {
       var regions = [];
 
       var urlBase = '/regions';
-      var callbackName = 'JSON_CALLBACK';
-      var url = urlBase + '?callback=' + callbackName;
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + jsonCallback;
       $http.get(url)
       .then(function(res) {
         var options = res.data;
@@ -247,3 +266,23 @@ LeagueStatTrackerApp.factory('$regions', ['$http', '$q', function($http, $q) {
   };
 }]);
 
+LeagueStatTrackerApp.factory('$gameTypes', ['$http', '$q', function($http, $q) {
+  return {
+    getGameTypes: function(callback) {
+      var deferred = $q.defer();
+      var gameTypes = [];
+      
+      var urlBase = '/gametypes';
+      var jsonCallback = '?callback=JSON_CALLBACK';
+      var url = urlBase + jsonCallback;
+      $http.get(url)
+      .then(function(res) {
+        deferred.resolve(gameTypes = res.data);
+        if (callback) {
+          callback();
+        }
+      });
+      return deferred.promise.$$state
+    }
+  };
+}]);
