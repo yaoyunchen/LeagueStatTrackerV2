@@ -127,31 +127,4 @@ router.get('/search/freechamps', function(req, res) {
   });
 });
 
-// // Get rune pages of a summoner.
-// router.get('/search/runes/:region/:summonerID', function(req, res) {
-//   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/" + req.params.summonerID + "/runes?api_key=" + API_KEY;
-
-//   request.get(path, function(err, response) {
-//     if (!err && response.statusCode === 200) {
-//       res.json(JSON.parse(response.body));
-//     } else {
-//       console.error(err);
-//     }
-//   });
-// });
-
-// // Get masteries pages of a summoner.
-// router.get('/search/masteries/:region/:summonerID', function(req, res) {
-//   var path = "https://" + req.params.region + ".api.pvp.net/api/lol/" + req.params.region + "/v1.4/summoner/" + req.params.summonerID+ "/masteries?api_key=" + API_KEY;
-
-//   request.get(path, function(err, response) {
-//     if (!err && response.statusCode === 200) {
-//       res.json(JSON.parse(response.body));
-//     } else {
-//       console.error(err);
-//     }
-//   });
-// });
-
-
 module.exports = router;

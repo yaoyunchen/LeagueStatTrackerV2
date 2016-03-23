@@ -6,6 +6,7 @@ var ngAnnotate =    require('gulp-ng-annotate');
 var sourcemaps =    require('gulp-sourcemaps');
 var plumber =       require('gulp-plumber');
 
+var Server =        require('karma').Server;
 
 gulp.task('js', function() {
   gulp.src(['public/javascripts/angularApp.js', 'public/javascripts/**/*.js'])
@@ -32,3 +33,20 @@ gulp.task('css', function() {
 gulp.task('watch', ['css'], function() {
   gulp.watch(['public/stylesheets/*.css', 'public/vendor/ngDialog-theme-default.css'], ['css']);
 });
+
+
+gulp.task('test', function(done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+});
+
+gulp.task('tdd', function(done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js'
+  }, done).start();
+});
+
+gulp.task('default', ['tdd'])
+

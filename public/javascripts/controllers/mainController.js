@@ -4,11 +4,6 @@ var LeagueStatTrackerApp = angular.module('LeagueStatTrackerApp');
 LeagueStatTrackerApp.controller('mainController', ['$scope', '$champions', '$location', function($scope, $champions, $location) {
   // Adds a class to the injected home page, used mainly for styling.
   $scope.pageClass = "page-home";
-  
-  // Clicking the summoner search button will redirect to the summoner page.
-  $scope.go = function(path) {
-    $location.path(path);
-  }
 
   // Determine the current free champions, with a callback to get the champion images from the results.
   $scope.freeChamps = $champions.getFree(function() {

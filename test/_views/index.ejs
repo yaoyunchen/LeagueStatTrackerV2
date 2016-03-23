@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- Declare leagueStateTrackerApp as the starting Angular module. -->
+<html class="no-js" ng-app="LeagueStatTrackerApp">
+<head>
+  <meta charset="utf-8">
+  <title>League Stat Tracker</title>
+  <meta name="description" content="League of Legends Stat Tracker using their API.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+  <link rel="stylesheet" type="text/css" href=".https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.5.9/css/ngDialog.min.css">
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/league-stat-tracker.css">
+
+  <!-- JS Source -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-route.min.js"></script>
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-animate.min.js"></script>
+
+  <!-- JS Plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.5.9/js/ngDialog.min.js"></script>
+  
+  <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+  <script src="https://cdn.jsdelivr.net/angular.charts/0.2.6/angular-charts.min.js"></script>
+
+  <!-- Custom JS -->
+  <script src='/javascripts/league-stat-tracker.js'></script>
+</head>
+
+<!-- Define Angular controller. -->
+<body ng-controller="mainController">
+  <!-- Header and navbar. -->
+  <header>
+    <!-- Navbar widget. -->
+    <navbar></navbar>
+  </header>
+
+  <!-- Main content and injected views. -->
+  <div class="container" id="main">
+    <!-- Takes required files based on route and injects into the main layout.-->
+    <div class="page {{ pageClass }}" ng-view></div>
+  </div>
+</body>
+</html>

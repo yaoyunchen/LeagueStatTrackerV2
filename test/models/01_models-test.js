@@ -1,7 +1,9 @@
+// cd into folder, $ mocha 01_models-test.js
+
 // HOMEPAGE TESTS
 
 // Set to test.
-process.env.NODE_ENV = 'test';
+//process.env.NODE_ENV = 'test';
 
 // Dependencies.
 var Champions = require('../../models/champions');
@@ -15,14 +17,11 @@ describe ('models', function() {
     var schema = Champions.schema.paths;
     it('should be defined', function() {
       assert.isDefined(Champions, 'Champions model defined');
-      // expect(Champions).to.exist;
     });
 
     it('should have id string field', function() {
       assert.isDefined(schema.id, 'ID field defined');
-      // expect(schema.id).to.exist;
       assert.equal('String', schema.id.instance, 'Instance of String');
-      // expect(schema.id.instance).to.equal('String');
     });
 
     it('should have key string field', function() {
@@ -53,7 +52,7 @@ describe ('models', function() {
     });
 
     it('should have name string field', function() {
-      assert.isDefined(schema.name. 'Name field defined');
+      assert.isDefined(schema.name, 'Name field defined');
       assert.equal('String', schema.name.instance, 'Instance of String');
     });
 

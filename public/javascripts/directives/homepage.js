@@ -1,14 +1,17 @@
 var LeagueStatTrackerApp = angular.module('LeagueStatTrackerApp');
 
-// HOMEPAGE
-// --------
-LeagueStatTrackerApp.directive('homepage', function() {
+LeagueStatTrackerApp.directive('homepage', ['$location', function($location) {
   return {
     restrict: 'E',
     transclude: true,
-    templateUrl: 'home.ejs'
+    templateUrl: 'home.ejs', 
+    link: function(scope, ele, attrs) {
+      scope.go = function(path) {
+        $location.path(path);
+      }
+    }
   }
-});
+}]);
 
 
      

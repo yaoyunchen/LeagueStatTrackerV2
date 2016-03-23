@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-sm-12 summoner-recent">
+    <table class="table table-inverse">
+      <thead>
+        <tr>
+          <th class="text-center col-sm-2">Game Mode</th>
+          <th class="text-center col-sm-2">Match ID</th>
+          <th class="text-center col-sm-4">Team One</th>
+          <th class="text-center col-sm-4">Team Two</th>
+          <th class="text-center col-sm-1">Win</th>
+          <th class="text-center col-sm-1">Game Info</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="recent in summoner.recent">
+          <td class="col-sm-2">{{ recent.gameMode }}</td>
+          <td class="col-sm-2">
+            <p>{{ recent.gameId }}</p>
+            <p>(champion: {{ recent.champ[0].name }})</p</td>
+          <td class="col-sm-4">
+            <span ng-repeat="player in recent.teams.teamOne">
+              <a class="champ-icon-link" type="button"
+                ng-dialog="modal-champ.ejs" 
+                ng-dialog-class="ngdialog-theme-default"
+                ng-dialog-scope="this"
+              >
+                <img class="champ-icon"
+                  ng-src="http://ddragon.leagueoflegends.com/cdn/6.5.1/img/champion/{{ player.champ[0].key}}.png"
+                />
+              </a>
+            </span>
+          </td>
+          <td class="col-sm-4">
+            <span ng-repeat="player in recent.teams.teamTwo">
+              <a class="champ-icon-link" type="button"
+                ng-dialog="modal-champ.ejs" 
+                ng-dialog-class="ngdialog-theme-default"
+                ng-dialog-scope="this"
+              >
+                <img class="champ-icon"
+                  ng-src="http://ddragon.leagueoflegends.com/cdn/6.5.1/img/champion/{{ player.champ[0].key}}.png"
+                />
+              </a>
+            </span>
+          </td>
+          <td class="col-sm-1">{{ recent.stats.win ? "Win" : "Loss" }}</td>
+          <td class="col-sm-1">
+            <button class="btn btn-warning" type="button" 
+              ng-dialog="modal-stats.ejs" 
+              ng-dialog-class="ngdialog-theme-default"
+              ng-dialog-scope="this"
+            >Info</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+

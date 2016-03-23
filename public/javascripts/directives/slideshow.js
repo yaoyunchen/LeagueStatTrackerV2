@@ -1,7 +1,5 @@
 var LeagueStatTrackerApp = angular.module('LeagueStatTrackerApp');
 
-// SLIDESHOW
-// ---------
 LeagueStatTrackerApp.directive("ngbgslideshow", function($interval) {
     return {
         restrict: 'E',

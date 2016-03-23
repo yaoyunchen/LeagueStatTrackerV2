@@ -1,13 +1,9 @@
-global.proxyquire = require('proxyquire');
+//global.proxyquire = require('proxyquire');
 global.sinon = require('sinon');
 
 var chai = require('chai');
-var chaiHttp = require('chai-http');
-var chaiAsPromised = require('chai-as-promised');
 var sinonChai = require('sinon-chai');
 
-chai.use(chaiHttp);
-chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
 global.chai = chai;
@@ -41,6 +37,6 @@ require('angular/angular');
 require('angular-mocks');
 
 global.angular = window.angular;
-// global.angular.mock = window.angular.mock;
+global.angular.mock = window.angular.mock;
 global.inject = global.angular.mock.inject;
 global.ngModule = global.angular.mock.module;

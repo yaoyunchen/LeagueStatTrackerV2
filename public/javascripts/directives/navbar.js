@@ -1,7 +1,5 @@
 var LeagueStatTrackerApp = angular.module('LeagueStatTrackerApp');
 
-// NAVBAR
-// ------
 LeagueStatTrackerApp.directive('navbar', function() {
   return {
     restrict: 'E',
