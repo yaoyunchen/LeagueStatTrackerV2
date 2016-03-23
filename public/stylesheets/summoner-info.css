@@ -65,5 +65,5 @@
 }
 .chart rect {
   fill:           white;
-  fill-opacity:   50%;
+  opacity:        50%;
 }
