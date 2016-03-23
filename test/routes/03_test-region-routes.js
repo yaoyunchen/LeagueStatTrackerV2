@@ -8,9 +8,6 @@ var app = require('../../app');
 require('../_test-helper');
 
 describe('routes', function() {
-
-
-  // Successful connection to LoL API to retrieve champions.
   describe('/regions', function(){
     var res, err;
     var northAmerica = { _id: '56ef9c3f6c332ceddc62c20a', id: 7, name: 'na' };

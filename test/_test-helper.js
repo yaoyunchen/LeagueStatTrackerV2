@@ -14,7 +14,7 @@ global.chai = chai;
 // Extend each object with chai's 'assert' property.
 global.assert = chai.assert;
 global.should = chai.should();
-global.expect = chai.expect();
+global.expect = chai.expect;
 
 var jsdom = require('jsdom').jsdom;
 global.document = jsdom('<html><head><script></script></head><body></body></html>');

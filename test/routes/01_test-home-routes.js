@@ -7,12 +7,6 @@ process.env.NODE_ENV = 'test';
 var app = require('../../app');
 require('../_test-helper');
 
-// chai = helper.chai;
-// var assert = chai.assert;
-// var should = chai.should();
-// var expect = chai.expect();
-
-
 describe('routes', function() {
   
   // Successful connection to the homepage.

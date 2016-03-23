@@ -8,9 +8,6 @@ var app = require('../../app');
 require('../_test-helper');
 
 describe('routes', function() {
-
-
-  // Successful connection to LoL API to retrieve champions.
   describe('/gametypes', function(){
     var res, err;
     // Before any tests, connect to the LoL API.

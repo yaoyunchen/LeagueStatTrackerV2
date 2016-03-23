@@ -8,9 +8,6 @@ var app = require('../../app');
 require('../_test-helper');
 
 describe('routes', function() {
-
-
-  // Successful connection to LoL API to retrieve champions.
   describe('/champs/:champID', function(){
     var res, err;
     var teemo = { 

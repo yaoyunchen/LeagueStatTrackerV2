@@ -17,10 +17,6 @@ var routes = require('./routes/index');
 // ----------------
 var app = express();
 
-// CONFIG
-// ------
-var config = require('./_config');
-
 // MONGOOSE
 // --------
 // // MONGODB SCHEMAS
