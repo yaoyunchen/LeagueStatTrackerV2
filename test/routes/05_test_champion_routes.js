@@ -1,4 +1,4 @@
-// REGION ROUTE TESTS
+//cd into routes and $ mocha the file.
 
 // Set to test.
 process.env.NODE_ENV = 'test';
@@ -6,6 +6,9 @@ process.env.NODE_ENV = 'test';
 // Dependencies.
 var app = require('../../app');
 require('../_test-helper');
+
+chaiHttp = require('chai-http')
+chai.use(chaiHttp);
 
 describe('routes', function() {
   describe('/champs/:champID', function(){
@@ -50,6 +53,8 @@ describe('routes', function() {
         });
 
         it('should contain an object equal to teemo', function() {
+          var results = res.body[0];
+          results = delete results.freeToPlay;
           assert.deepEqual(teemo, res.body[0]);
         });
       });       // data

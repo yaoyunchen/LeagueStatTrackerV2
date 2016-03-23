@@ -1,4 +1,4 @@
-// REGION ROUTE TESTS
+//cd into routes and $ mocha the file.
 
 // Set to test.
 process.env.NODE_ENV = 'test';
@@ -6,6 +6,9 @@ process.env.NODE_ENV = 'test';
 // Dependencies.
 var app = require('../../app');
 require('../_test-helper');
+
+chaiHttp = require('chai-http')
+chai.use(chaiHttp);
 
 describe('routes', function() {
   describe('/gametypes', function(){

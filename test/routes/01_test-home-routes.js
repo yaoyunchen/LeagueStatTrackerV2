@@ -1,3 +1,5 @@
+// cd into routes and $ mocha.
+
 // HOMEPAGE TESTS
 
 // Set to test.
@@ -6,6 +8,9 @@ process.env.NODE_ENV = 'test';
 // Dependencies.
 var app = require('../../app');
 require('../_test-helper');
+
+chaiHttp = require('chai-http')
+chai.use(chaiHttp);
 
 describe('routes', function() {
   
