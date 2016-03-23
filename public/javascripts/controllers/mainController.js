@@ -10,6 +10,10 @@ LeagueStatTrackerApp.controller('mainController', ['$scope', '$champions', '$loc
     $scope.getChamps();
   });
   
+  $scope.go = function() {
+    $location.path('/summoner')
+  }
+  
   // Gets the static champion images.  Used to populate the slideshow display on the home page
   $scope.getChamps = function() {
     if ($scope.freeChamps.value.length == 10) {
